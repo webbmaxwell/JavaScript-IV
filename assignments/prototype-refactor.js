@@ -8,39 +8,38 @@ Prototype Refactor
 
 */
 
-function GameObject (attrs) {
-  this.createdAt = Date();
-  this.name = attrs.name;
-  this.dimensions = attrs.dimensions
-};
-
-GameObject.prototype.destroy = function () {
-  return `${this.name} was removed from the game`
-};
-
-
-function CharacterStats (stats) {
-  GameObject.call(this, stats);
-  this.healthPoints = stats.healthPoints;
-};
-
-CharacterStats.prototype = Object.create(GameObject.prototype);
-
-CharacterStats.prototype.takeDamage = function () {
-  return `${this.name} took damage.`
-};
-
-function Humanoid (attrs) {
-  CharacterStats.call(this, attrs);
-  this.team = attrs.team;
-  this.weapons = attrs.weapons;
-  this.language = attrs.language;
-  this.greet = function () {
-    return `${this.name} offers a greeting in ${this.language}.`
+class GameObject {
+  constructor (attrs) {
+    this.createdAt = Date();
+    this.name = attrs.name;
+    this.dimensions = attrs.dimensions
+  };
+  destroy() {
+    return `${this.name} was removed from the game`
   };
 };
 
-Humanoid.prototype = Object.create(CharacterStats.prototype);
+class CharacterStats extends GameObject {
+  constructor (stats) {
+    super(stats);
+    this.healthPoints = stats.healthPoints;
+  };
+  takeDamage() {
+    return `${this.name} took damage.`
+  };
+};
+
+class Humanoid extends CharacterStats {
+  constructor (attrs) {
+    super(attrs);
+    this.team = attrs.team;
+    this.weapons = attrs.weapons;
+    this.language = attrs.language;
+    this.greet = function () {
+      return `${this.name} offers a greeting in ${this.language}.`
+      }
+    };
+  };
 
   const mage = new Humanoid({
     createdAt: new Date(),
